@@ -42,7 +42,7 @@ Developers and DeFi services face:
 ## ⚙️ Tech Stack
 
 - **Nest.js** – modular, scalable backend framework  
-- **Ethers.js / Web3.js** – blockchain communication  
+- ** Web3.js** – blockchain communication  
 - **Uniswap V2 Factory** – core liquidity reference  
 - **RPC Providers:** Infura, Alchemy, QuickNode  
 
