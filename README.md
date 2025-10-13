@@ -57,5 +57,5 @@ It’s built for developers who value **technical elegance**, **low latency**, a
 
 ## 📄 License
 
-This project is licensed under the **GNU General Public License v3.0 (GPL-3.0)**.  
+This project is licensed under the **Apache license 2.0**.  
 No commercial or private use is allowed without explicit permission.
