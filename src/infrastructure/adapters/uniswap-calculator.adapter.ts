@@ -7,9 +7,8 @@ import type { IBlockchainPort } from '../../domain/ports/blockchain.port';
 import { BLOCKCHAIN_PORT } from '../../domain/ports/blockchain.port';
 import { UNISWAP_V2_FACTORY, FACTORY_ABI } from '../config/constants';
 
-// Constantes para mejorar legibilidad
 const ZERO_ADDRESS = '0x0000000000000000000000000000000000000000';
-const UNISWAP_FEE_MULTIPLIER = 997n; // 0.3% fee = 997/1000
+const UNISWAP_FEE_MULTIPLIER = 997n;
 const FEE_DENOMINATOR = 1000n;
 
 @Injectable()
@@ -80,10 +79,6 @@ export class UniswapCalculatorAdapter implements ISwapCalculatorPort {
     return token.toLowerCase() === token0;
   }
 
-  /**
-   * Fórmula de Uniswap V2 con fee de 0.3%
-   * amountOut = (amountIn * 997 * reserveOut) / (reserveIn * 1000 + amountIn * 997)
-   */
   private calculateAmountOut(
     amountIn: bigint,
     reserveIn: bigint,
