@@ -12,6 +12,162 @@
 
 ---
 
+## 📖 Documentation
+
+**[→ Full Technical Documentation (Google Docs)](https://docs.google.com/document/d/1aXPTcPZc_cNP8XvbJcoP4pjtd-_6WFXVt55XNosJDnE/edit?usp=sharing)**
+
+Complete guide including:
+- Architecture details (Hexagonal Architecture)
+- How the technical requirements are accomplished
+- Step-by-step endpoint usage
+- Testing strategies
+
+---
+
+## 🚀 Quick Start
+
+### **1. Installation**
+
+```bash
+# Navigate to project directory
+cd uniswap-gas-api
+
+# Install dependencies
+npm install
+```
+
+### **2. Environment Setup**
+
+Create a `.env` file in the root:
+
+```bash
+RPC_URL=https://mainnet.infura.io/v3/YOUR_INFURA_API_KEY
+PORT=3000
+CACHE_TTL=10
+```
+
+**Get your API key:**
+- Go to [Infura](https://infura.io), create an account
+- Create a new Ethereum Mainnet project
+- Copy your API key and replace `YOUR_INFURA_API_KEY`
+
+### **3. Run the Application**
+
+```bash
+# Development mode
+npm run start:dev
+
+# Production mode
+npm run build
+npm run start:prod
+```
+
+**Expected output:**
+```
+Application is running on: http://localhost:3000
+```
+
+---
+
+## 🔌 API Endpoints
+
+### **GET /gasPrice**
+
+Returns current Ethereum gas price (response time <50ms with caching).
+
+**PowerShell:**
+```powershell
+Invoke-WebRequest http://localhost:3000/gasPrice
+```
+
+**Bash/cURL:**
+```bash
+curl http://localhost:3000/gasPrice
+```
+
+**Response:**
+```json
+{
+  "wei": "191998275",
+  "gwei": "0.19",
+  "timestamp": "2025-10-18T18:56:15.267Z"
+}
+```
+
+---
+
+### **GET /return/:from/:to/:amount**
+
+Calculates Uniswap V2 swap output using off-chain math.
+
+**Example: WETH → USDC (1 WETH)**
+
+**PowerShell:**
+```powershell
+Invoke-WebRequest "http://localhost:3000/return/0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2/0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48/1000000000000000000"
+```
+
+**Bash/cURL:**
+```bash
+curl "http://localhost:3000/return/0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2/0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48/1000000000000000000"
+```
+
+**Response:**
+```json
+{
+  "fromToken": "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2",
+  "toToken": "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48",
+  "amountIn": "1000000000000000000",
+  "amountOut": "3245678912",
+  "pairAddress": "0xB4e16d0168e52d35CaCD2c6185b44281Ec28C9Dc"
+}
+```
+
+**Token addresses:**
+- WETH: `0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2`
+- USDC: `0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48`
+- DAI: `0x6B175474E89094C44Da98b954EedeAC495271d0F`
+
+---
+
+## 🧪 Testing
+
+### **Unit Tests**
+```bash
+npm test
+```
+
+Tests domain entities and use cases with mocked dependencies.
+
+### **E2E Tests**
+```bash
+npm run test:e2e
+```
+
+Tests the complete API with real dependencies:
+- ✅ `/gasPrice` returns valid gas price
+- ✅ `/gasPrice` responds in <50ms on cached request
+- ✅ `/return` calculates swap output correctly
+- ✅ `/return` rejects invalid token addresses
+
+### **Manual Performance Test**
+
+```powershell
+# Test cache performance
+Write-Host "Primera llamada (llenando cache)..." -ForegroundColor Yellow
+Invoke-WebRequest http://localhost:3000/gasPrice | Out-Null
+
+Write-Host "Segunda llamada (desde cache)..." -ForegroundColor Yellow
+$tiempo = Measure-Command { Invoke-WebRequest http://localhost:3000/gasPrice | Out-Null }
+
+Write-Host "`nTiempo: $($tiempo.TotalMilliseconds)ms" -ForegroundColor Green
+if ($tiempo.TotalMilliseconds -lt 50) {
+    Write-Host "✅ <50ms requirement met" -ForegroundColor Green
+}
+```
+
+---
+
 ## 🏷️ Project Overview
 
 **ShadowPath** is a lightweight **Nest.js backend service** designed to deliver critical Ethereum network data with **ultra-low latency** and **off-chain precision**.  
